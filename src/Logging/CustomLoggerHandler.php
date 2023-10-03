@@ -2,30 +2,28 @@
 
 namespace Anboz\CustomLogger\Logging;
 
-use Anboz\CustomLogger\Services\Telegram\TelegramBotApi;
 use Monolog\Handler\AbstractProcessingHandler;
 use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 
 final class CustomLoggerHandler extends AbstractProcessingHandler
 {
-    private ?string $level = null;
-
     public function __construct(array $config)
     {
         $level = Logger::toMonologLevel($config['level']);
-        $this->level = $level;
 
         parent::__construct($level);
     }
 
     public function write(array $record): void
     {
-        $log = Log::channel($this->level);
+        $channelName = mb_strtolower($record['level_name']);
 
-        $message = $record['formatted'];
+        $log = Log::channel($channelName);
 
-        match ($this->level) {
+        $message = $record['message'];
+
+        match ($channelName) {
             'info' => $log->info($message),
             'error' => $log->error($message),
             'warning' => $log->warning($message),
