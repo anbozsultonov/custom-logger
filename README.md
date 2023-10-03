@@ -31,6 +31,7 @@ config/logging.php
 
 \Log::alert('first alert test from anboz logging');
 ````
+````
 //result
 ![img.png](img.png)
 ![img_1.png](img_1.png)
