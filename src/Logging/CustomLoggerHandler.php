@@ -27,10 +27,12 @@ final class CustomLoggerHandler extends AbstractProcessingHandler
             $context = $record->context;
 
         } else {
-            $channelName = strtolower($record['level_name']);
+            $channelName = $record['level_name'];
             $message = $record['message'];
             $context = $record['context'];
         }
+
+        $channelName = strtolower($channelName);
 
         $log = Log::channel($channelName);
 
