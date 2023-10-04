@@ -17,16 +17,22 @@ final class CustomLoggerHandler extends AbstractProcessingHandler
 
     public function write(mixed $record): void
     {
+        $channelName = 'info';
+        $message = '';
+        $context = [];
+
         if (!is_array($record)) {
-            $record = (array)$record;
+            $channelName = $record->level->name;
+            $message = $record->message;
+            $context = $record->context;
+
+        } else {
+            $channelName = strtolower($record['level_name']);
+            $message = $record['message'];
+            $context = $record['context'];
         }
 
-        $channelName = strtolower($record['level_name']);
-
         $log = Log::channel($channelName);
-
-        $message = $record['message'];
-        $context = $record['context'];
 
         match ($channelName) {
             'info' => $log->info($message, $context),
