@@ -15,9 +15,13 @@ final class CustomLoggerHandler extends AbstractProcessingHandler
         parent::__construct($level);
     }
 
-    public function write(array $record): void
+    public function write(mixed $record): void
     {
-        $channelName = mb_strtolower($record['level_name']);
+        if (!is_array($record)) {
+            $record = (array)$record;
+        }
+
+        $channelName = strtolower($record['level_name']);
 
         $log = Log::channel($channelName);
 
